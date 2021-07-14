@@ -1,3 +1,4 @@
+require "uri"
 module Helpers
   module Requester
     def self.login_form
@@ -14,6 +15,42 @@ module Helpers
       username = gets_string("Username: ")
       password = gets_string("Password: ", length: 6)
       { username: username, password: password }
+    end
+
+    def self.create_user
+      email = valid_email("Email: ")
+      password = gets_string("Password: ", length: 6)
+      first_name = gets_string("First name: ", required: false)
+      last_name = gets_string("Last name: ", required: false)
+      phone = valid_phone("Phone: ")
+      { email: email, password: password,
+        first_name: first_name, last_name: last_name,
+        phone: phone }
+    end
+
+    def self.valid_email(label)
+      regex = URI::MailTo::EMAIL_REGEXP
+      print label
+      input = gets.chomp
+      puts input.match?(/#{regex}/)
+      until input.match?(/#{regex}/)
+        puts "#{label}Invalid format"
+        print label
+        input = gets.chomp
+      end
+      input
+    end
+
+    def self.valid_phone(label)
+      phone = '^([+](51)[ ])?(\d{9})'
+      print label
+      input = gets.chomp
+      until input.match?(/#{phone}/)
+        puts "#{label}Required format: +51 111222333 or 111222333"
+        print label
+        input = gets.chomp
+      end
+      input
     end
 
     def self.gets_string(label, length: 0, required: true)
