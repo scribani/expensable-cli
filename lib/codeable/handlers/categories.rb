@@ -30,7 +30,10 @@ module Codeable
         found_category.merge(updated_category)
       end
 
-      def delete(id); end
+      def delete(_id)
+        # Codeable::Services::Categories.destroy(id, @token)
+        @categories.delete_if { |category| category[:id] == id }
+      end
 
       def toggle; end
 
