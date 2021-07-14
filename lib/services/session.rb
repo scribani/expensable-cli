@@ -17,7 +17,7 @@ module Services
       JSON.parse(response.body, symbolize_names: true)
     end
 
-    def self.logout
+    def self.logout(token)
       options = {
         headers: {
           "Content-Type": "application/json",
