@@ -2,6 +2,7 @@ AllCops:
   NewCops: enable
   Exclude:
     - "*/*_test.rb"
+    - "_test.rb"
 
 Style/StringLiterals:
   Description: "Checks if uses of quotes match the configured preference."
