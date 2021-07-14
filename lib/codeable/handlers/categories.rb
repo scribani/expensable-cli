@@ -14,6 +14,16 @@ module Codeable
         } # Codeable::Services::Categories.create(category_data, @token)
         @categories << category_response
       end
+
+      def update_category(id); end
+
+      def delete(id); end
+
+      def toggle; end
+
+      def add_to(id); end
+
+      def show(id); end
     end
   end
 end
