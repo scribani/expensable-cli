@@ -34,7 +34,7 @@ module Helpers
       return nil if !required && input.empty?
 
       while input.empty? || input.size < length
-        puts "#{label} minimum size is #{length}" if input.size < length
+        puts "#{label}Minimum #{length} characters" if input.size < length
         print label
         input = gets.chomp
       end

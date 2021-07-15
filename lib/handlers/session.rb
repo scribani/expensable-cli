@@ -5,7 +5,7 @@ module Handlers
   module Session
     include Helpers::Requester
 
-    def create_user
+    def create_new_user
       user_data = create_user
       user_response = Services::User.create(user_data)
       @token = user_response[:token]

@@ -3,6 +3,7 @@ require_relative "./handlers/session"
 require_relative "./helpers/presenter"
 require_relative "./helpers/requester"
 require_relative "./services/session"
+require_relative "./services/user"
 
 class Expensable
   include Helpers::Presenter
@@ -21,15 +22,14 @@ class Expensable
       begin
         case action
         when "login" then login
-        when "create_user" then create_user
+        when "create_user" then create_new_user
         end
       rescue HTTParty::ResponseError => e
         @token = nil
         puts JSON.parse(e.message)["errors"].first
       end
+      # category_page if @token
       action, _id = select_main_menu
     end
   end
-
-  def create_user; end
 end
