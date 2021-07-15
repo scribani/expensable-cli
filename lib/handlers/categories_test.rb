@@ -55,4 +55,22 @@ class CategoriesHandlersTest < Minitest::Test
     assert_equal "Updated name", @categories.last[:name]
     assert_equal "expense", @categories.last[:transaction_type]
   end
+
+  def test_delete_category_correctly_deletes_category
+    inputs = ["Test Transaction", "income", "Updated name", "expense"]
+
+    id = nil
+    capture_io do
+      simulate_stdin(*inputs) do
+        create_category
+        id = @categories.last[:id]
+        delete_category(id)
+      end
+    end
+
+    assert_raise StandardError do
+      clean_category_after_test(id)
+    end
+    assert @categories.empty?
+  end
 end
