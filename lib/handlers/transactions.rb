@@ -24,6 +24,8 @@ module Codeable
       end
 
       def calculate_total(transaction_list)
+        return 0 if transaction_list.empty?
+
         total = 0
         transaction_list.each do |transaction|
           total += transaction[:amount]
