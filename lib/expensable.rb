@@ -59,7 +59,7 @@ class Expensable
         when "update" then update_category(id)
         when "delete" then delete_category(id)
         when "add-to" then add_to_category(id)
-        when "toggle" then toggle_category(id)
+        when "toggle" then puts "toggle" # HARDCODE!!!
         when "next" then puts "next_month" # HARDCODE!!!
         when "prev" then puts "prev_month" # HARDCODE!!!
         end

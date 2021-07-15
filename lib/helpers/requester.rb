@@ -5,19 +5,24 @@ module Helpers
     include Helpers::Validations
 
     def select_main_menu
-      gets_with_options %w[login create_user exit]
+      options = %w[login create_user exit]
+      gets_with_options options, options
     end
 
     def select_category_menu
-      options_array = ["create", "show ID", "update ID", "delete ID\n",
-                       "\radd-to ID", "toggle", "next", "prev", "logout"]
-      gets_with_options options_array
+      menu = ["create", "show ID", "update ID", "delete ID\n",
+              "\radd-to ID", "toggle", "next", "prev", "logout"]
+      options_array = ["create", "show", "update", "delete",
+                      "add-to", "toggle", "next", "prev", "logout"]
+      gets_with_options menu, options_array
     end
 
     def select_transaction_menu
-      options_array = ["add", "update ID", "delete ID\n",
-                       "\rnext", "prev", "back"]
-      gets_with_options options_array
+      menu = ["add", "update ID", "delete ID\n",
+              "\rnext", "prev", "back"]
+      options_array = ["add", "update", "delete",
+                      "next", "prev", "back"]
+      gets_with_options menu, options_array
     end
 
     def login_user

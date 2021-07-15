@@ -97,8 +97,8 @@ module Helpers
       false
     end
 
-    def gets_with_options(options)
-      puts options.join(" | ")
+    def gets_with_options(menu, options)
+      puts menu.join(" | ")
       print "> "
       input = gets.chomp.split.map(&:strip)
       until options.include? input[0]

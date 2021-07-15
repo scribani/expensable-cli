@@ -16,7 +16,7 @@ module Handlers
       category_data = create_and_update_category
       updated_category = Services::Category.update(category_data, id, @token)
       found_category = @categories.find(&id_look_up(id))
-      found_category.merge(updated_category)
+      found_category.merge!(updated_category)
     end
 
     def delete_category(id)
