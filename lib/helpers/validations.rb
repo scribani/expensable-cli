@@ -1,9 +1,10 @@
+require "date"
 module Helpers
   module Validations
     def valid_email(label)
       regex = '\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z'
       print label
-      puts regex
+
       input = gets.chomp
       until input.match?(/#{regex}/i)
         puts "#{label}Invalid format"
@@ -38,7 +39,7 @@ module Helpers
       input
     end
 
-    def valid_login(label)
+    def valid_input_no_empty(label)
       print label
       input = gets.chomp
 
@@ -48,7 +49,50 @@ module Helpers
         input = gets.chomp
       end
       input
-      # FALTA EL RESPONSE BODY MESSAGE PARA VERIFICAR SI ES EMAIL CORRERCTO O NO
+    end
+
+    def valid_transaction_type(label)
+      print label
+      input = gets.chomp.downcase
+
+      until %w[expense income].include?(input)
+        puts  "#{label}Only income or expense"
+        print label
+        input = gets.chomp.downcase
+      end
+      input
+    end
+
+    def positive_integer(label)
+      print label
+      input = gets.chomp.to_i
+
+      until input.positive?
+        puts "#{label}Cannot be zero"
+        print label
+        input = gets.chomp.to_i
+      end
+      input
+    end
+
+    def valid_date(label)
+      print label
+      input = gets.chomp
+
+      until validate_date(input)
+        puts "#{label}Required format: YYYY-MM-DD"
+        print label
+        input = gets.chomp
+      end
+      Date.strptime(input).to_s
+    end
+
+    def validate_date(input)
+      date_format = "%Y-%m-%d"
+      DateTime.strptime(input, date_format)
+      true
+    rescue ArgumentError
+      false
     end
 
     def gets_with_options(options, required: true)
