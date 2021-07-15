@@ -10,6 +10,9 @@ module Services
       request(token, "get")
     end
 
+    def self.show(id, token)
+      request(token, "get", id)
+    end
     def self.create(category_data, token)
       request(token, "post", nil, category_data)
     end

@@ -40,6 +40,7 @@ class CategoryServiceTest < Minitest::Test
     assert_includes response.keys, :transaction_type
     assert_includes response.keys, :transactions
     id = response[:id]
+    show_call id
     update_call id
   end
 
@@ -54,7 +55,11 @@ class CategoryServiceTest < Minitest::Test
     assert_nil response
   end
 
-  def test_search_call
-    skip
+  def show_call(id)
+    response = Services::Category.show( id, @token)
+    assert_includes response.keys, :id
+    assert_includes response.keys, :name
+    assert_includes response.keys, :transaction_type
+    assert_includes response.keys, :transactions
   end
 end
