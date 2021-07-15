@@ -20,9 +20,9 @@ module Helpers
       puts "\r#{table}"
     end
 
-    def print_transactions_table(list)
+    def print_transactions_table(name, list)
       table = Terminal::Table.new
-      table.title =  list[:name]
+      table.title = "#{name}\nJuly 2021" # HARDCODE!!!
       table.headings = %w[ID Date Amount Notes]
       table.rows = list.map { |item| [item[:id], item[:date], item[:amount], item[:notes]] }
       puts "\r#{table}"

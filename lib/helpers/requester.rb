@@ -12,16 +12,16 @@ module Helpers
     def select_category_menu
       menu = ["create", "show ID", "update ID", "delete ID\n",
               "\radd-to ID", "toggle", "next", "prev", "logout"]
-      options_array = ["create", "show", "update", "delete",
-                      "add-to", "toggle", "next", "prev", "logout"]
+      options_array = %w[create show update delete
+                         add-to toggle next prev logout]
       gets_with_options menu, options_array
     end
 
     def select_transaction_menu
       menu = ["add", "update ID", "delete ID\n",
               "\rnext", "prev", "back"]
-      options_array = ["add", "update", "delete",
-                      "next", "prev", "back"]
+      options_array = %w[add update delete
+                         next prev back]
       gets_with_options menu, options_array
     end
 

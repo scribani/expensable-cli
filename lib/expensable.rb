@@ -55,7 +55,7 @@ class Expensable
       begin
         case action
         when "create" then create_category
-        when "show" then show_category(id)
+        when "show" then transaction_page(id)
         when "update" then update_category(id)
         when "delete" then delete_category(id)
         when "add-to" then add_to_category(id)
@@ -66,9 +66,31 @@ class Expensable
       rescue HTTParty::ResponseError => e
         puts JSON.parse(e.message)["errors"].first
       end
-      # transaction_page if @token
       print_updated_table
       action, id = select_category_menu
+    end
+  end
+
+  def transaction_page(id)
+    @transactions = Services::Transaction.list(@token, id)
+    selected_category = @categories.find { |category| category[:id] == id }
+    category_name = selected_category[:name]
+    print_transactions_table(category_name, @transactions)
+    action, id = select_transaction_menu
+    until action == "back"
+      begin
+        case action
+        when "add" then puts "add" # HARDCODE!!!
+        when "update" then puts "update(id)" # HARDCODE!!!
+        when "delete" then puts "delete(id)" # HARDCODE!!!
+        when "next" then puts "next_month" # HARDCODE!!!
+        when "prev" then puts "prev_month" # HARDCODE!!!
+        end
+      rescue HTTParty::ResponseError => e
+        puts JSON.parse(e.message)["errors"].first
+      end
+      print_transactions_table(category_name, @transactions)
+      action, id = select_transaction_menu
     end
   end
 end
