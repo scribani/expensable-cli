@@ -6,7 +6,7 @@ require_relative "../helpers/requester"
 require_relative "../services/session"
 require_relative "../services/user"
 
-class CategoryServiceTest < Minitest::Test
+class SessionHandlersTest < Minitest::Test
   include Handlers::Session
   include IoTestHelpers
   include HTTParty
