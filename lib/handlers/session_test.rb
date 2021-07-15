@@ -14,21 +14,11 @@ class CategoryServiceTest < Minitest::Test
   base_uri "https://expensable-api.herokuapp.com"
 
   def setup
-    @user_data = { email: "test23@mail.com", password: "123456" }
-    @options = {
-      headers: { "Content-Type": "application/json" },
-      body: @user_data.to_json
-    }
-    @token = self.class.obtain_token(@options)
-  end
-
-  def self.obtain_token(options)
-    response = post("/login", options)
-    response.parsed_response["token"]
+    @token = nil
   end
 
   def clean_user_after_test
-    self.class.delete("/profile", { headers: { Authorization: "Token token=#{@token}" } })
+    self.class.delete("/profile", headers: { Authorization: "Token token=#{@token}" })
   end
 
   def test_create_user_correctly_returns_email_from_server_response
@@ -43,5 +33,17 @@ class CategoryServiceTest < Minitest::Test
     clean_user_after_test
 
     assert_equal "new_user_23@mail.com", email
+  end
+
+  def test_login_correctly_returns_email_from_server_response
+    inputs = ["test23@mail.com", "123456"]
+    email = ""
+    capture_io do
+      simulate_stdin(*inputs) do
+        email = login
+      end
+    end
+
+    assert_equal "test23@mail.com", email
   end
 end
