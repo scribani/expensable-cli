@@ -1,4 +1,5 @@
 require "json"
+require "date"
 require "terminal-table"
 require_relative "./handlers/session"
 require_relative "./handlers/transactions"
@@ -21,6 +22,7 @@ class Expensable
     @token = nil
     @categories = []
     @transactions = []
+    @date = Date.today.to_s
   end
 
   def start
@@ -38,13 +40,6 @@ class Expensable
       category_page if @token
       action, _id = select_main_menu
     end
-  end
-
-  def print_updated_table
-    @categories.map do |category|
-      category[:total] = calculate_total(category[:transactions])
-    end
-    print_table(@categories)
   end
 
   def category_page
@@ -93,5 +88,19 @@ class Expensable
       print_transactions_table(category_name, @transactions)
       action, transaction_id = select_transaction_menu
     end
+  end
+
+  private
+
+  def format_date(date)
+    date_parsed = Date.parse(date)
+    date_parsed.strftime("%B %Y")
+  end
+
+  def print_updated_table
+    @categories.map do |category|
+      category[:total] = calculate_total(category[:transactions])
+    end
+    print_table(@categories)
   end
 end
