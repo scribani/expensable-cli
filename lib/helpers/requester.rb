@@ -32,7 +32,6 @@ module Helpers
       regex = URI::MailTo::EMAIL_REGEXP
       print label
       input = gets.chomp
-      puts input.match?(/#{regex}/)
       until input.match?(/#{regex}/)
         puts "#{label}Invalid format"
         print label
@@ -42,7 +41,7 @@ module Helpers
     end
 
     def self.valid_phone(label)
-      phone = '^([+](51)[ ])?(\d{9})'
+      phone = '^(\+51 )?(\d{9})$'
       print label
       input = gets.chomp
       until input.match?(/#{phone}/)
