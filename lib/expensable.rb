@@ -57,8 +57,8 @@ class Expensable
         when "delete" then delete_category(id)
         when "add-to" then add_to_category(id)
         when "toggle" then @type = @type == "expense" ? "income" : "expense"
-        when "next" then puts "next_month" # HARDCODE!!!
-        when "prev" then puts "prev_month" # HARDCODE!!!
+        when "next" then puts @date += 30
+        when "prev" then puts @date -= 30
         end
       rescue HTTParty::ResponseError => e
         puts JSON.parse(e.message)["errors"].first
@@ -78,8 +78,8 @@ class Expensable
         when "add" then add_transaction(category_id)
         when "update" then update_transaction(category_id, transaction_id)
         when "delete" then delete_transaction(category_id, transaction_id)
-        when "next" then puts "next_month" # HARDCODE!!!
-        when "prev" then puts "prev_month" # HARDCODE!!!
+        when "next" then puts @date += 30
+        when "prev" then puts @date -= 30
         end
       rescue HTTParty::ResponseError => e
         puts JSON.parse(e.message)["errors"].first
