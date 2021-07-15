@@ -10,7 +10,7 @@ module Services
       request(token, "get", id)
     end
 
-    def self.create(transaction_data, token, id)
+    def self.create(token, id, transaction_data)
       request(token, "post", id, transaction_data)
     end
 
@@ -18,11 +18,11 @@ module Services
       request(token, "get", id, nil, transaction_id)
     end
 
-    def self.update(transaction_data, id, token, transaction_id)
+    def self.update(token, id, transaction_id, transaction_data)
       request(token, "patch", id, transaction_data, transaction_id)
     end
 
-    def self.destroy(id, token, transaction_id)
+    def self.destroy(token, id, transaction_id)
       request(token, "delete", id, nil, transaction_id)
     end
 

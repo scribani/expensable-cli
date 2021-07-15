@@ -56,7 +56,7 @@ class CategoryServiceTest < Minitest::Test
   end
 
   def show_call(id)
-    response = Services::Category.show( id, @token)
+    response = Services::Category.show(id, @token)
     assert_includes response.keys, :id
     assert_includes response.keys, :name
     assert_includes response.keys, :transaction_type
