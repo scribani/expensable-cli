@@ -21,6 +21,10 @@ class CategoriesHandlersTest < Minitest::Test
     self.class.delete("/categories/#{id}", headers: { Authorization: "Token token=#{@token}" })
   end
 
+  def gets_id_from_last
+    @categories.last[:id]
+  end
+
   def test_create_category_correctly_adds_new_category_to_list
     inputs = ["Test Transaction", "income"]
 
@@ -29,7 +33,7 @@ class CategoriesHandlersTest < Minitest::Test
         create_category
       end
     end
-    id = @categories.last[:id]
+    id = gets_id_from_last
     clean_category_after_test(id)
 
     assert_instance_of Hash, @categories.last
@@ -46,7 +50,7 @@ class CategoriesHandlersTest < Minitest::Test
     capture_io do
       simulate_stdin(*inputs) do
         create_category
-        id = @categories.last[:id]
+        id = gets_id_from_last
         update_category(id)
       end
     end
@@ -63,7 +67,7 @@ class CategoriesHandlersTest < Minitest::Test
     capture_io do
       simulate_stdin(*inputs) do
         create_category
-        id = @categories.last[:id]
+        id = gets_id_from_last
         delete_category(id)
       end
     end
@@ -72,5 +76,28 @@ class CategoriesHandlersTest < Minitest::Test
       clean_category_after_test(id)
     end
     assert @categories.empty?
+  end
+
+  def test_toggle_category_correctly_changes_transaction_type
+    toggle_category
+    inputs = ["Test income", "income", "Test expense", "expense"]
+
+    first_id = nil
+    second_id = nil
+    capture_io do
+      simulate_stdin(*inputs) do
+        create_category
+        first_id = gets_id_from_last
+        toggle_category(first_id)
+        create_category
+        second_id = gets_id_from_last
+        toggle_category(second_id)
+      end
+    end
+    clean_category_after_test(first_id)
+    clean_category_after_test(second_id)
+
+    assert_equal "expense", @categories.first[:transaction_type]
+    assert_equal "income", @categories.last[:transaction_type]
   end
 end
