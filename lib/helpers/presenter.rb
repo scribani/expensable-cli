@@ -12,21 +12,11 @@ module Helpers
       gets.chomp
     end
 
-    def print_expenses_table(list)
+    def print_table(list)
       table = Terminal::Table.new
       table.title = list[:transaction_type].capitalize
       table.headings = %w[ID Category Total]
       table.rows = list.map { |item| [item[:id], item[:name], item[:total]] }
-      puts "\r#{table}"
-    end
-
-    def print_incomes_table(list)
-      table = Terminal::Table.new
-      table.title =  list["Income"]
-      table.headings = %w[ID Category Total]
-      table.rows = [
-        [item["ID"], item["Category"], item["Total"]]
-      ]
       puts "\r#{table}"
     end
 
@@ -40,7 +30,7 @@ module Helpers
 
     def self.print_bye
       message = ["####################################",
-                 "#    Thanks for using Expensable    #",
+                 "#    Thanks for using Expensable   #",
                  "####################################"]
       message.join("\n")
     end

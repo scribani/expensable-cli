@@ -2,6 +2,7 @@ require_relative "validations"
 module Helpers
   module Requester
     include Helpers::Validations
+
     def select_main_menu
       gets_with_options %w[login create_user exit]
     end
