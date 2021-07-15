@@ -1,4 +1,5 @@
 require_relative "validations"
+
 module Helpers
   module Requester
     include Helpers::Validations
@@ -21,7 +22,7 @@ module Helpers
 
     def login_user
       email = valid_input_no_empty("Email: ")
-      password = valid_login_no_empty("Password: ")
+      password = valid_input_no_empty("Password: ")
       { email: email, password: password }
     end
 
