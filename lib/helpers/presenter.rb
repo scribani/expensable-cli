@@ -12,19 +12,19 @@ module Helpers
       gets.chomp
     end
 
-    def print_table(list)
+    def print_table(type, formated_date, categories)
       table = Terminal::Table.new
-      table.title = "Expense\nJuly 2021" # HARDCODE!!!
+      table.title = "#{type.capitalize}s\n#{formated_date}"
       table.headings = %w[ID Category Total]
-      table.rows = list.map { |item| [item[:id], item[:name], item[:total]] }
+      table.rows = categories.map { |item| [item[:id], item[:name], item[:total]] }
       puts "\r#{table}"
     end
 
-    def print_transactions_table(name, list)
+    def print_transactions_table(name, formated_date, transactions)
       table = Terminal::Table.new
-      table.title = "#{name}\nJuly 2021" # HARDCODE!!!
+      table.title = "#{name.capitalize}\n#{formated_date}"
       table.headings = %w[ID Date Amount Notes]
-      table.rows = list.map { |item| [item[:id], item[:date], item[:amount], item[:notes]] }
+      table.rows = transactions.map { |item| [item[:id], item[:date], item[:amount], item[:notes]] }
       puts "\r#{table}"
     end
 

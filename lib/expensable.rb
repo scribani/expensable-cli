@@ -6,6 +6,7 @@ require_relative "./handlers/transactions"
 require_relative "./handlers/categories"
 require_relative "./helpers/presenter"
 require_relative "./helpers/requester"
+require_relative "./helpers/filters"
 require_relative "./services/session"
 require_relative "./services/user"
 require_relative "./services/category"
@@ -14,6 +15,7 @@ require_relative "./services/transaction"
 class Expensable
   include Helpers::Presenter
   include Helpers::Requester
+  include Helpers::Filters
   include Handlers::Session
   include Handlers::Transactions
   include Handlers::Categories
@@ -22,7 +24,8 @@ class Expensable
     @token = nil
     @categories = []
     @transactions = []
-    @date = Date.today.to_s
+    @date = Date.today
+    @type = "expense"
   end
 
   def start
@@ -43,7 +46,6 @@ class Expensable
   end
 
   def category_page
-    @categories = Services::Category.list(@token)
     print_updated_table
     action, id = select_category_menu
     until action == "logout"
@@ -54,7 +56,7 @@ class Expensable
         when "update" then update_category(id)
         when "delete" then delete_category(id)
         when "add-to" then add_to_category(id)
-        when "toggle" then puts "toggle" # HARDCODE!!!
+        when "toggle" then @type = @type == "expense" ? "income" : "expense"
         when "next" then puts "next_month" # HARDCODE!!!
         when "prev" then puts "prev_month" # HARDCODE!!!
         end
@@ -68,10 +70,7 @@ class Expensable
 
   def transaction_page(category_id)
     print "loading..."
-    @transactions = Services::Transaction.list(@token, category_id)
-    selected_category = @categories.find { |category| category[:id] == category_id }
-    category_name = selected_category[:name]
-    print_transactions_table(category_name, @transactions)
+    print_updated_transaction_table(category_id)
     action, transaction_id = select_transaction_menu
     until action == "back"
       begin
@@ -85,7 +84,7 @@ class Expensable
       rescue HTTParty::ResponseError => e
         puts JSON.parse(e.message)["errors"].first
       end
-      print_transactions_table(category_name, @transactions)
+      print_updated_transaction_table(category_id)
       action, transaction_id = select_transaction_menu
     end
   end
@@ -98,9 +97,22 @@ class Expensable
   end
 
   def print_updated_table
-    @categories.map do |category|
-      category[:total] = calculate_total(category[:transactions])
+    @categories = Services::Category.list(@token)
+    by_type = filter_by_type(@categories, @type)
+    by_type.map do |category|
+      by_date = filter_by_date(category[:transactions], @date.to_s)
+      category[:total] = calculate_total(by_date)
     end
-    print_table(@categories)
+    formated_date = format_date(@date.to_s)
+    print_table(@type, formated_date, by_type)
+  end
+
+  def print_updated_transaction_table(category_id)
+    @transactions = Services::Transaction.list(@token, category_id)
+    selected_category = @categories.find { |category| category[:id] == category_id }
+    category_name = selected_category[:name]
+    filtered_transactions = filter_by_date(@transactions, @date.to_s)
+    formated_date = format_date(@date.to_s)
+    print_transactions_table(category_name, formated_date, filtered_transactions)
   end
 end

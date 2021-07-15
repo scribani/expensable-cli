@@ -27,13 +27,13 @@ module Handlers
       @categories.delete_if(&id_look_up(id))
     end
 
-    def toggle_category(id)
-      found_category = @categories.find(&id_look_up(id))
-      type = found_category[:transaction_type] == "expense" ? "income" : "expense"
-      print "loading..."
-      updated_category = Services::Category.update({ transaction_type: type }, id, @token)
-      found_category.merge(updated_category)
-    end
+    # def toggle_category(id)
+    #   found_category = @categories.find(&id_look_up(id))
+    #   type = found_category[:transaction_type] == "expense" ? "income" : "expense"
+    #   print "loading..."
+    #   updated_category = Services::Category.update({ transaction_type: type }, id, @token)
+    #   found_category.merge(updated_category)
+    # end
 
     def add_to_category(id)
       transaction_data = transaction_form
