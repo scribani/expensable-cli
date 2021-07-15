@@ -38,4 +38,21 @@ class CategoriesHandlersTest < Minitest::Test
     assert_includes @categories.last.keys, :transaction_type
     assert_includes @categories.last.keys, :transactions
   end
+
+  def test_update_category_correctly_updates_category
+    inputs = ["Test Transaction", "income", "Updated name", "expense"]
+
+    id = nil
+    capture_io do
+      simulate_stdin(*inputs) do
+        create_category
+        id = @categories.last[:id]
+        update_category(id)
+      end
+    end
+    clean_category_after_test(id)
+
+    assert_equal "Updated name", @categories.last[:name]
+    assert_equal "expense", @categories.last[:transaction_type]
+  end
 end
