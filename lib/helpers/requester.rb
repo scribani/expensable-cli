@@ -13,7 +13,7 @@ module Helpers
     def self.login_user
       username = gets_string("Username: ")
       password = gets_string("Password: ", length: 6)
-      { username: username, password: password }
+      { email: username, password: password }
     end
 
     def self.gets_string(label, length: 0, required: true)
