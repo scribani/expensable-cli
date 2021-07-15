@@ -14,7 +14,7 @@ module Helpers
 
     def print_table(list)
       table = Terminal::Table.new
-      table.title = list[:transaction_type].capitalize
+      table.title = "Expense\nJuly 2021" #HARDCODE!!!
       table.headings = %w[ID Category Total]
       table.rows = list.map { |item| [item[:id], item[:name], item[:total]] }
       puts "\r#{table}"

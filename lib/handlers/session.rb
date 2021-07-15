@@ -12,7 +12,7 @@ module Handlers
     end
 
     def login
-      login_data = login_user
+      login_data = { email: "test23@mail.com", password: "123456" } # login_user
       login_response = Services::Session.login(login_data)
       @token = login_response[:token]
     end
