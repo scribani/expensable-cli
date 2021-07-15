@@ -14,9 +14,9 @@ module Helpers
 
     def print_expenses_table(list)
       table = Terminal::Table.new
-      table.title = "Expenses"
+      table.title = list[:transaction_type].capitalize
       table.headings = %w[ID Category Total]
-      table.rows = list.map { |item| [item["ID"], item["Category"], item["Total"]] }
+      table.rows = list.map { |item| [item[:id], item[:name], item[:total]] }
       puts "\r#{table}"
     end
 
@@ -32,9 +32,9 @@ module Helpers
 
     def print_transactions_table(list)
       table = Terminal::Table.new
-      table.title =  list["Transportation"]
+      table.title =  list[:name]
       table.headings = %w[ID Date Amount Notes]
-      table.rows = list.map { |item| [item["ID"], item["Date"], item["Amount"], item["Notes"]] }
+      table.rows = list.map { |item| [item[:id], item[:date], item[:amount], item[:notes]] }
       puts "\r#{table}"
     end
 
