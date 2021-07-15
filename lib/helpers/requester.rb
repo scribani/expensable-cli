@@ -32,20 +32,13 @@ module Helpers
       phone = valid_phone("Phone: ")
       { email: email, password: password,
         first_name: first_name, last_name: last_name,
-        phone: phone }
+        phone: phone }.compact
     end
 
     def create_and_update_category
       name_transaction = valid_input_no_empty("Name: ")
       transaction_type = valid_transaction_type("Transaction type: ")
       { name_transaction: name_transaction, transaction_type: transaction_type }
-    end
-
-    def valid_add_to
-      amount = positive_integer("Amount: ")
-      date = valid_date("Date: ")
-      notes = valid_string("Notes: ", required: false)
-      { amount: amount, date: date, notes: notes }
     end
   end
 end

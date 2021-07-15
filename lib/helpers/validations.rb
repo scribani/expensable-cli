@@ -18,6 +18,8 @@ module Helpers
       regex = '^(\+51 )?(\d{9})$'
       print label
       input = gets.chomp
+      return nil if input.empty?
+
       until input.match?(/#{regex}/)
         puts "#{label}Required format: +51 111222333 or 111222333"
         print label
@@ -95,21 +97,24 @@ module Helpers
       false
     end
 
-    def gets_with_options(options, required: true)
+    def gets_with_options(options)
       puts options.join(" | ")
       print "> "
       input = gets.chomp.split.map(&:strip)
-      return nil if input.empty? && !required
-
       until options.include? input[0]
-        return nil if input.empty? && !required
-
         puts "Invalid option"
         print "> "
         input = gets.chomp.split.map(&:strip)
       end
       action, id = input
       [action, id.to_i]
+    end
+
+    def valid_add_to
+      amount = positive_integer("Amount: ")
+      date = valid_date("Date: ")
+      notes = valid_string("Notes: ", required: false)
+      { amount: amount, date: date, notes: notes }
     end
   end
 end
