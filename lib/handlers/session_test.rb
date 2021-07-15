@@ -1,5 +1,4 @@
 require "httparty"
-require "json"
 require "minitest/autorun"
 require_relative "./session"
 require_relative "../io_test_helpers"
