@@ -71,18 +71,19 @@ class Expensable
     end
   end
 
-  def transaction_page(id)
-    @transactions = Services::Transaction.list(@token, id)
-    selected_category = @categories.find { |category| category[:id] == id }
+  def transaction_page(category_id)
+    print "loading..."
+    @transactions = Services::Transaction.list(@token, category_id)
+    selected_category = @categories.find { |category| category[:id] == category_id }
     category_name = selected_category[:name]
     print_transactions_table(category_name, @transactions)
-    action, id = select_transaction_menu
+    action, transaction_id = select_transaction_menu
     until action == "back"
       begin
         case action
-        when "add" then puts "add" # HARDCODE!!!
-        when "update" then puts "update(id)" # HARDCODE!!!
-        when "delete" then puts "delete(id)" # HARDCODE!!!
+        when "add" then add_transaction(category_id)
+        when "update" then update_transaction(category_id, transaction_id)
+        when "delete" then delete_transaction(category_id, transaction_id)
         when "next" then puts "next_month" # HARDCODE!!!
         when "prev" then puts "prev_month" # HARDCODE!!!
         end
@@ -90,7 +91,7 @@ class Expensable
         puts JSON.parse(e.message)["errors"].first
       end
       print_transactions_table(category_name, @transactions)
-      action, id = select_transaction_menu
+      action, transaction_id = select_transaction_menu
     end
   end
 end

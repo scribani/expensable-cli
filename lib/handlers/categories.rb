@@ -8,18 +8,21 @@ module Handlers
 
     def create_category
       category_data = create_and_update_category
+      print "loading..."
       category_response = Services::Category.create(category_data, @token)
       @categories << category_response
     end
 
     def update_category(id)
       category_data = create_and_update_category
+      print "loading..."
       updated_category = Services::Category.update(category_data, id, @token)
       found_category = @categories.find(&id_look_up(id))
       found_category.merge!(updated_category)
     end
 
     def delete_category(id)
+      print "loading..."
       Services::Category.destroy(id, @token)
       @categories.delete_if(&id_look_up(id))
     end
@@ -27,12 +30,14 @@ module Handlers
     def toggle_category(id)
       found_category = @categories.find(&id_look_up(id))
       type = found_category[:transaction_type] == "expense" ? "income" : "expense"
+      print "loading..."
       updated_category = Services::Category.update({ transaction_type: type }, id, @token)
       found_category.merge(updated_category)
     end
 
     def add_to_category(id)
       transaction_data = transaction_form
+      print "loading..."
       transaction_response = Services::Transaction.create(@token, id, transaction_data)
       found_category = @categories.find(&id_look_up(id))
       found_category[:transactions] << transaction_response
