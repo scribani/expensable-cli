@@ -23,7 +23,13 @@ module Codeable
         @categories.delete_if { |category| category[:id] == category_id }
       end
 
-      def calculate_total; end
+      def calculate_total(transaction_list)
+        total = 0
+        transaction_list.each do |transaction|
+          total += transaction[:amount]
+        end
+        total
+      end
     end
   end
 end
