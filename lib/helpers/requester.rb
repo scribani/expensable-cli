@@ -1,50 +1,44 @@
+require_relative "validations"
 module Helpers
   module Requester
-    def self.login_form
+    include Helpers::Validations
+    def select_main_menu
       gets_with_options %w[login create_user exit]
     end
 
-    def self.select_transaction
-      options_array = ["create", "show ID", "update ID", "delete ID",
-                       "\nadd-to ID", "toggle", "next", "prev", "logout"]
+    def select_category_menu
+      options_array = ["create", "show ID", "update ID", "delete ID\n",
+                       "\radd-to ID", "toggle", "next", "prev", "logout"]
       gets_with_options options_array
     end
 
-    def self.login_user
-      username = gets_string("Username: ")
-      password = gets_string("Password: ", length: 6)
-      { email: username, password: password }
+    def select_transaction_menu
+      options_array = ["add", "update ID", "delete ID\n",
+                       "\rnext", "prev", "back"]
+      gets_with_options options_array
     end
 
-    def self.gets_string(label, length: 0, required: true)
-      print label
-      input = gets.chomp
-      return nil if !required && input.empty?
-
-      while input.empty? || input.size < length
-        puts "#{label} Cannot be blank" if input.empty?
-        puts "#{label} minimum size is #{length}" if input.size < length
-        print label
-        input = gets.chomp
-      end
-      input
+    def login_user
+      email = valid_input_no_empty("Email: ")
+      password = valid_login_no_empty("Password: ")
+      { email: email, password: password }
     end
 
-    def self.gets_with_options(options, required: true)
-      puts options.join(" | ")
-      print "> "
-      input = gets.chomp.split.map(&:strip)
-      return nil if input.empty? && !required
+    def create_user
+      email = valid_email("Email: ")
+      password = valid_string("Password: ", length: 6)
+      first_name = valid_string("First name: ", required: false)
+      last_name = valid_string("Last name: ", required: false)
+      phone = valid_phone("Phone: ")
+      { email: email, password: password,
+        first_name: first_name, last_name: last_name,
+        phone: phone }.compact
+    end
 
-      until options.include? input[0]
-        return nil if input.empty? && !required
-
-        puts "Invalid option"
-        print "> "
-        input = gets.chomp.split.map(&:strip)
-      end
-      action, id = input
-      [action, id.to_i]
+    def create_and_update_category
+      name_transaction = valid_input_no_empty("Name: ")
+      transaction_type = valid_transaction_type("Transaction type: ")
+      { name_transaction: name_transaction, transaction_type: transaction_type }
     end
   end
 end
