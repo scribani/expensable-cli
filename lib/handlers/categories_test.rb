@@ -13,8 +13,17 @@ class CategoriesHandlersTest < Minitest::Test
   base_uri "https://expensable-api.herokuapp.com"
 
   def setup
-    @token = nil
+    @token = obtain_token
     @categories = []
+  end
+
+  def obtain_token
+    options = {
+      headers: { "Content-Type": "application/json" },
+      body: { email: "test23@mail.com", password: "123456" }.to_json
+    }
+    login_response = self.class.post("/login", options)
+    login_response["token"]
   end
 
   def clean_category_after_test(id)
@@ -72,32 +81,7 @@ class CategoriesHandlersTest < Minitest::Test
       end
     end
 
-    assert_raise StandardError do
-      clean_category_after_test(id)
-    end
+    assert_equal 404, clean_category_after_test(id).code
     assert @categories.empty?
-  end
-
-  def test_toggle_category_correctly_changes_transaction_type
-    toggle_category
-    inputs = ["Test income", "income", "Test expense", "expense"]
-
-    first_id = nil
-    second_id = nil
-    capture_io do
-      simulate_stdin(*inputs) do
-        create_category
-        first_id = gets_id_from_last
-        toggle_category(first_id)
-        create_category
-        second_id = gets_id_from_last
-        toggle_category(second_id)
-      end
-    end
-    clean_category_after_test(first_id)
-    clean_category_after_test(second_id)
-
-    assert_equal "expense", @categories.first[:transaction_type]
-    assert_equal "income", @categories.last[:transaction_type]
   end
 end

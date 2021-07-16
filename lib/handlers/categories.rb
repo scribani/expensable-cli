@@ -1,6 +1,10 @@
+require_relative "../helpers/requester"
+require_relative "../helpers/validations"
+
 module Handlers
   module Categories
     include Helpers::Requester
+    include Helpers::Validations
 
     def id_look_up(id)
       proc { |category| category[:id] == id }
@@ -14,6 +18,8 @@ module Handlers
     end
 
     def update_category(id)
+      raise StandardError, "Not Found" unless validation_id("categories", id)
+
       category_data = create_and_update_category
       print "loading..."
       updated_category = Services::Category.update(category_data, id, @token)
@@ -22,29 +28,21 @@ module Handlers
     end
 
     def delete_category(id)
+      raise StandardError, "Not Found" unless validation_id("categories", id)
+
       print "loading..."
       Services::Category.destroy(id, @token)
       @categories.delete_if(&id_look_up(id))
     end
 
-    # def toggle_category(id)
-    #   found_category = @categories.find(&id_look_up(id))
-    #   type = found_category[:transaction_type] == "expense" ? "income" : "expense"
-    #   print "loading..."
-    #   updated_category = Services::Category.update({ transaction_type: type }, id, @token)
-    #   found_category.merge(updated_category)
-    # end
-
     def add_to_category(id)
+      raise StandardError, "Not Found" unless validation_id("categories", id)
+
       transaction_data = transaction_form
       print "loading..."
       transaction_response = Services::Transaction.create(@token, id, transaction_data)
       found_category = @categories.find(&id_look_up(id))
       found_category[:transactions] << transaction_response
-    end
-
-    def show_category(id)
-      @transactions = Services::Transaction.list(@token, id)
     end
   end
 end

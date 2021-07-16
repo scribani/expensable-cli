@@ -33,8 +33,12 @@ class Expensable
     until action == "exit"
       begin
         case action
-        when "login" then login
-        when "create_user" then create_new_user
+        when "login"
+          @date = Date.today
+          login
+        when "create_user"
+          @date = Date.today
+          create_new_user
         end
       rescue HTTParty::ResponseError => e
         @token = nil
@@ -57,11 +61,11 @@ class Expensable
         when "delete" then delete_category(id)
         when "add-to" then add_to_category(id)
         when "toggle" then @type = @type == "expense" ? "income" : "expense"
-        when "next" then puts @date += 30
-        when "prev" then puts @date -= 30
+        when "next" then @date += 30
+        when "prev" then @date -= 30
         end
-      rescue HTTParty::ResponseError => e
-        puts JSON.parse(e.message)["errors"].first
+      rescue HTTParty::ResponseError, StandardError => e
+        puts "\r#{e.message}#{' ' * 10}"
       end
       print_updated_table
       action, id = select_category_menu
@@ -78,11 +82,11 @@ class Expensable
         when "add" then add_transaction(category_id)
         when "update" then update_transaction(category_id, transaction_id)
         when "delete" then delete_transaction(category_id, transaction_id)
-        when "next" then puts @date += 30
-        when "prev" then puts @date -= 30
+        when "next" then @date += 30
+        when "prev" then @date -= 30
         end
-      rescue HTTParty::ResponseError => e
-        puts JSON.parse(e.message)["errors"].first
+      rescue HTTParty::ResponseError, StandardError => e
+        puts "\r#{e.message}#{' ' * 10}"
       end
       print_updated_transaction_table(category_id)
       action, transaction_id = select_transaction_menu
@@ -108,6 +112,8 @@ class Expensable
   end
 
   def print_updated_transaction_table(category_id)
+    raise StandardError, "Not Found" unless validation_id("categories", category_id)
+
     @transactions = Services::Transaction.list(@token, category_id)
     selected_category = @categories.find { |category| category[:id] == category_id }
     category_name = selected_category[:name]

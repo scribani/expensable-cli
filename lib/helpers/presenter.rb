@@ -24,7 +24,9 @@ module Helpers
       table = Terminal::Table.new
       table.title = "#{name.capitalize}\n#{formated_date}"
       table.headings = %w[ID Date Amount Notes]
-      table.rows = transactions.map { |item| [item[:id], item[:date], item[:amount], item[:notes]] }
+      table.rows = transactions.map do |item|
+        [item[:id], Date.parse(item[:date]).strftime("%a, %b %d"), item[:amount], item[:notes]]
+      end
       puts "\r#{table}"
     end
 

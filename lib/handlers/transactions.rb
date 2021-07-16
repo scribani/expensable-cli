@@ -3,6 +3,8 @@ module Handlers
     include Helpers::Requester
 
     def add_transaction(category_id)
+      raise StandardError, "Not Found" unless validation_id("categories", category_id)
+
       transaction_data = transaction_form
       print "loading..."
       transaction_response = Services::Transaction.create(@token, category_id, transaction_data)
@@ -10,6 +12,8 @@ module Handlers
     end
 
     def update_transaction(category_id, transaction_id)
+      raise StandardError, "Not Found" unless validation_id("transactions", transaction_id)
+
       transaction_data = transaction_form
       print "loading..."
       transaction_response = Services::Transaction.update(@token, category_id, transaction_id, transaction_data)
@@ -17,6 +21,8 @@ module Handlers
     end
 
     def delete_transaction(category_id, transaction_id)
+      raise StandardError, "Not Found" unless validation_id("transactions", transaction_id)
+
       print "loading..."
       Services::Transaction.destroy(@token, category_id, transaction_id)
       @transactions.delete_if { |transaction| transaction[:id] == transaction_id }

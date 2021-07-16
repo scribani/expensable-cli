@@ -1,4 +1,5 @@
 require "date"
+
 module Helpers
   module Validations
     def valid_email(label)
@@ -115,6 +116,17 @@ module Helpers
       date = valid_date("Date: ")
       notes = valid_string("Notes: ", required: false)
       { amount: amount, date: date, notes: notes }
+    end
+
+    def validation_id(list, id)
+      case list
+      when "categories"
+        @categories.find { |category| category[:id] == id }
+      when "transactions"
+        pp @transactions
+        p id
+        @transactions.find { |transaction| transaction[:id] == id }
+      end
     end
   end
 end
